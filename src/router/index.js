@@ -1,25 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Home from '../views/Home.vue'
+import Login from "@/views/auth/Login";
+import Register from "@/views/auth/Register";
+import Manage from "@/views/Manage";
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: Home
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    path: '/auth/login',
+    name: 'login',
+    component: Login,
+  },
+  {
+    path: '/auth/register',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/todo',
+    name: 'manage',
+    component: Manage,
+    children:[
+      {
+        //route for create todo
+        path:'/',
+        component: Manage,
+      },
+      {
+        //route for edit todo
+        path:':id',
+        component: Manage,
+      }
+    ]
+  },
+
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+//per route guard to check users login situation and maintain session
+router.beforeEach((to,from,next)=>{
+  if(!localStorage.getItem('token')&&!to.fullPath.includes('/auth')) router.push('/auth/login').then()
+  next()
 })
 
 export default router

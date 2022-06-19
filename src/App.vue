@@ -1,30 +1,27 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <Suspense>
+    <template #default>
+      <v-app>
+        <v-main>
+          <router-view/>
+        </v-main>
+      </v-app>
+    </template>
+    <template #fallback>
+      <div class="d-flex justify-center align-center" style="width: 100%;height: 100%">
+        <v-progress-circular indeterminate size="50" color="orange"/>
+      </div>
+    </template>
+  </Suspense>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-nav {
-  padding: 30px;
-}
+export default {
+  name: 'App',
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  data: () => ({
+    //
+  }),
 }
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
